@@ -97,10 +97,8 @@ svg {
 .leyenda span {
 	margin-left: 5px;
 	font-size: 12px;
-	background-color: #dcdcdc;
-	padding: 3px;
-	border-radius: 3px;
 	color: #999;
+	font-style: italic;
 }
 .leyenda .name {
 	display: flex;
