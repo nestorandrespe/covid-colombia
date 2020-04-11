@@ -72,12 +72,14 @@ svg {
 	margin-bottom: 2.5vh;
 	max-width: 80%;
 	display: flex;
+	flex-wrap: wrap;
 }
 
 .leyenda .item {
 	display: flex;
 	margin-right: 20px;
 	align-items: center;
+	margin-bottom: 5px;
 }
 
 .leyenda .icon {
