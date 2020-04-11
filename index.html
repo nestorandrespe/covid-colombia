@@ -6,6 +6,7 @@
 
 	<script type="text/javascript" src="./js/d3v5.js"></script>
   <script type="text/javascript" src="./js/d3ano.js"></script>
+  <script type="text/javascript" src="./js/jquery.js"></script>
   
   <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
@@ -13,12 +14,102 @@
 	<link rel="stylesheet" href="./css/datos.css" media="all">
 </head>
 <body>
-  <h1>Casos COVID-19 en Colombia</h1>
+  <h1>COVID-19 en Colombia</h1>
+
+  <div class="title">
+    <div class="top">
+      <div class="icon"></div>
+      <div class="txt">Casos positivos acumulados</div>
+    </div>
+  </div>
   <svg version="1.1" id="bg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 850" style="enable-background:new 0 0 1920 850;" xml:space="preserve"></svg>
+  <div class="leyenda">
+    <div class="item">
+      <div class="icon" style="background-color: rgba(237, 194, 42, 1);"></div>
+      <div class="txt">Casos positivos acumulados</div>
+    </div>
+    <div class="item">
+      <div class="icon" style="background-color: #dcdcdc;"></div>
+      <div class="txt">Casos positivos acumulados con escala logarítmica</div>
+    </div>
+  </div>
+
+  <div class="title">
+    <div class="top">
+      <div class="icon"></div>
+      <div class="txt">Tasa de crecimiento casos nuevos al día</div>
+    </div>
+  </div>
   <svg version="1.1" id="bg_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 400" style="enable-background:new 0 0 1920 400;" xml:space="preserve"></svg>
+  <div class="leyenda">
+    <div class="item">
+      <div class="icon" style="background-color: rgba(237, 194, 42, 0.3);"></div>
+      <div class="txt">Casos positivos al día</div>
+    </div>
+    <div class="item">
+      <div class="icon" style="background-color: #666"></div>
+      <div class="txt">Casos positivos al día con tasa de crecimiento en %</div>
+    </div>
+    <div class="item">
+      <div class="icon" style="background-color: red;"></div>
+      <div class="txt">Regresión lineal de los casos positivos los últimos siete días</div>
+    </div>
+  </div>
+
+  <div class="title">
+    <div class="top">
+      <div class="icon"></div>
+      <div class="txt">Pruebas procesadas al día y porcentaje de pruebas positivas</div>
+    </div>
+  </div>
   <svg version="1.1" id="bg_4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 400" style="enable-background:new 0 0 1920 400;" xml:space="preserve"></svg>
+  <div class="leyenda">
+    <div class="item">
+      <div class="icon" style="background-color: rgba(237, 194, 42, 0.2);"></div>
+      <div class="txt">Pruebas procesadas al día</div>
+    </div>
+    <div class="item">
+      <div class="icon" style="background-color: rgba(237, 194, 42, 0.6);"></div>
+      <div class="txt">Casos positivos al día</div>
+    </div>
+    <div class="item">
+      <div class="icon" style="background-color: red;"></div>
+      <div class="txt">Regresión lineal del porcentaje de casos positivos los últimos siete días</div>
+    </div>
+  </div>
+
+  <div class="title">
+    <div class="top">
+      <div class="icon"></div>
+      <div class="txt">Curvas de contagio de otros paises en latinoamérica</div>
+    </div>
+  </div>
   <svg version="1.1" id="bg_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1920 600" style="enable-background:new 0 0 1920 600;" xml:space="preserve"></svg>
-  <div id="leyenda_paises"></div>
+  <div id="leyenda_paises" class="leyenda">
+
+  </div>
+
+  <div class="title">
+    <div class="top">
+      <div class="icon"></div>
+      <div class="txt">Créditos</div>
+    </div>
+  </div>
+
+  <div class="txt_bloque">
+    <h3>Datos</h3>
+    <ul>
+      <li><a target="_blank" href="https://github.com/CSSEGISandData/COVID-19">Johns Hopkins CSSE</a></li>
+      <li><a target="_blank" href="https://www.ins.gov.co/Noticias/Paginas/Coronavirus.aspx">Instituto Nacional de Salud</a></li>
+      <li><a target="_blank" href="https://www.worldometers.info/coronavirus/?">Worldometer</a></li>
+    </ul>
+    <h3>Desarrollo</h3>
+    <ul>
+      <li>Néstor Andrés Peña <a target="_blank" href="https://www.instagram.com/nestor2509/">Instagram</a> | <a target="_blank" href="https://twitter.com/nestorandres">Twitter</a></li>
+      <li><a target="_blank" href="https://github.com/nestorandrespe/covid-colombia">Disponible en Github</a></li>
+    </ul>
+  </div>
+
 	<script type="text/javascript" src="./js/script.js"></script>
 </body>
 </html>

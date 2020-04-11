@@ -125,23 +125,35 @@ Promise.all([
     dibujarCurva(svg_nuevos, dataTemp, '#666', 'dif');
     dibujarPuntos(svg_nuevos, 'circles_2', dataTemp, '#999', 30, 'dif', true);
 
+    console.log(dataTemp);
+
     heightScale.domain([3500,0]).range([0,300])
     dibujarAxis(svg_totales_tests, false);
     heightScale.domain([3500,0]).range([0,300])
     for(var m = 0; m < files[2].length; m++){
       var total = parseInt(files[2][m].total);
+      files[2][m].name = 'Colombia'
       if(m > 0){
         var anterior = parseInt(files[2][m - 1].total);
-        if(anterior > 0) files[2][m].dif = total - anterior
-        else files[2][m].dif = 0
+        if(anterior > 0){
+          files[2][m].dif = total - anterior
+          files[2][m].por = (dataTemp[m].dif / (total - anterior)) * 100
+        }
+        else {
+          files[2][m].dif = 0
+          files[2][m].por = 0
+        }
       } else {
         files[2][m].dif = 0
+        files[2][m].por = 0
       }
     }
     dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
 
-    console.log(files[2], 'hola')
+    heightScale.domain([20,0]).range([0,300])
+    dibujarCurva(svg_totales_tests, files[2], '#666', 'por')
+    dibujarPuntosPorcentaje(svg_totales_tests, 'por_totales_test', files[2], '#666', -20, 'por')
 
     // Curva acumulado
     heightScale.domain([heightMax,0]).range([0,800])
@@ -155,11 +167,19 @@ Promise.all([
   for(var i = 0; i < countryData.length; i++) {
     var dataTemp = organizaData(countryData[i]);
 
-    console.log(dataTemp)
-
     heightScale.domain([heightMax,0]).range([0,500])
     dibujarCurva(svg_paises_acumulado, dataTemp, 'rgb(237, 194, 42)', 'num');
     dibujarDot(svg_paises_acumulado,'dots_'+i, dataTemp, 'num');
+
+    $item = $('<div class="item"></div>');
+    $icon = $('<div class="icon"></div>');
+    $name = $('<div class="txt"></div>');
+
+    $name.html(dataTemp[0].name);
+    if(dataTemp[0].name != 'Colombia') $icon.css({'background-color': colorScale(dataTemp[0].name)})
+    $item.append($icon).append($name);
+
+    $('#leyenda_paises').append($item)
   }
 })
 
@@ -255,6 +275,35 @@ function dibujarPuntos(svg, clase, data, color, pos, key, por) {
       .attr('font-size', 12)
       .attr('transform', 'translate(0,-20)')
     }
+}
+
+function dibujarPuntosPorcentaje(svg, clase, data, color, pos, key) {
+  var nodos = svg.selectAll('.'+clase)
+    .data(data)
+    .join('g')
+    .attr('class', clase)
+    .attr('transform', (d,i)=>{
+      return 'translate('+xScale(i)+','+heightScale(d[key])+')'
+    })
+
+    nodos.append('circle')
+    .attr('r', d => {
+      if(d[key] > 0) return 8
+      else return 0
+    })
+    .attr('fill', 'none')
+    .attr('stroke', color)
+
+    nodos.append('text')
+    .text((d,i)=>{
+      if(d[key] > 0) return (d[key]).toFixed(2) + '%'
+      else return ''
+    })
+    .attr('fill', color)
+    .attr('font-size', 12)
+    .attr('text-anchor', 'middle')
+    .attr('transform', 'translate(0,'+pos+')')
+    
 }
 
 function dibujarAxis(svg, log) {
