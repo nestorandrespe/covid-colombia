@@ -14,13 +14,17 @@ svg {
 	max-width: 80%;
 }
 
+#bg_3 {
+	overflow: hidden;
+}
+
 .tick line {
 	stroke: #dcdcdc;
 }
 
 .tick text {
 	fill: #999;
-	font-size: 20px;
+	font-size: 16px;
 }
 
 .domain {

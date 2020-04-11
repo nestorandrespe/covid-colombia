@@ -1,0 +1,24 @@
+// crea un nuevo elemento <script>
+var script = document.createElement('script');
+
+// añadir jquery al nuevo elemento
+script.src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(script);
+var $tabla = $('#main_table_countries_today')
+var elementoDescarga = document.createElement('a');
+var archivo = [];
+$tabla.find('tr').map(function(){
+    if($(this).find('td:nth-child(1) a').html() != undefined && $(this).find('td:nth-child(11)').html() != ''){
+        var obj = {
+            'name': $(this).find('td:nth-child(1) a').html(),
+            'total_tests': parseInt($(this).find('td:nth-child(11)').html().replace(',', '')),
+            'tests_mil': parseInt($(this).find('td:nth-child(11)').html().replace(',', '')),
+            'cases': parseInt($(this).find('td:nth-child(2)').html().replace(',', '')),
+        };
+        archivo.push(obj);
+    }
+});
+elementoDescarga.href = 'data:attachment/text,' + encodeURI(JSON.stringify(archivo));
+elementoDescarga.target = '_blank';
+elementoDescarga.download = 'archivo.json';
+elementoDescarga.click();
