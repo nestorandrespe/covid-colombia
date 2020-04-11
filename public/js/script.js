@@ -127,19 +127,24 @@ Promise.all([
     dibujarCurva(svg_nuevos, dataTemp, '#666', 'dif');
     dibujarPuntos(svg_nuevos, 'circles_2', dataTemp, '#999', 30, 'dif', true);
 
-    console.log(dataTemp);
 
     heightScale.domain([3500,0]).range([0,300])
     dibujarAxis(svg_totales_tests, false);
     heightScale.domain([3500,0]).range([0,300])
+
+    var slice = false
+
     for(var m = 0; m < files[2].length; m++){
       var total = parseInt(files[2][m].total);
       files[2][m].name = 'Colombia'
       if(m > 0){
         var anterior = parseInt(files[2][m - 1].total);
-        if(anterior > 0){
+        if(anterior > 0 && m < dataTemp.length){
           files[2][m].dif = total - anterior
           files[2][m].por = (dataTemp[m].dif / (total - anterior)) * 100
+        }
+        else if(m == dataTemp.length){
+          slice = true;
         }
         else {
           files[2][m].dif = 0
@@ -150,6 +155,8 @@ Promise.all([
         files[2][m].por = 0
       }
     }
+    if(slice) files[2].slice(files[2].length - 1, files[2].length)
+    
     dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
 
