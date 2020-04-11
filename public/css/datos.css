@@ -87,6 +87,9 @@ svg {
 	margin-right: 5px;
 }
 
+.leyenda .txt {
+	width: calc(100% - 20px);
+}
 .txt_bloque {
 	text-align: left;
 	margin: 0 auto;

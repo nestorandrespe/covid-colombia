@@ -17,7 +17,8 @@ var dias_col = 0;
 Promise.all([
   d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
   d3.json('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/archivo.json'),
-  d3.csv('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/totales_tests.csv')
+  d3.csv('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/totales_tests.csv'),
+  d3.csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD&api_foundry=true')
 ]).then(files => {
   const data = files[0];
 
@@ -28,6 +29,7 @@ Promise.all([
   var svg_nuevos = d3.select('#bg_2');
   var svg_paises_acumulado = d3.select('#bg_3');
   var svg_totales_tests = d3.select('#bg_4');
+  var svg_paises_porcentaje_tests = d3.select('#bg_5');
 
   var gGraf = svg.append('g').attr('class', 'gGraf');
 
@@ -48,7 +50,7 @@ Promise.all([
       data[i]['Country/Region'] == 'Argentina' || 
       data[i]['Country/Region'] == 'Chile' || 
       data[i]['Country/Region'] == 'Mexico' || 
-      data[i]['Country/Region'] == 'Italy' ||
+      // data[i]['Country/Region'] == 'Italy' ||
       data[i]['Country/Region'] == 'Brazil' ||
       data[i]['Country/Region'] == 'Ecuador'
     ) countryData.push(data[i])
@@ -181,6 +183,14 @@ Promise.all([
 
     $('#leyenda_paises').append($item)
   }
+
+  
+
+  // puntos
+  heightScale.domain([100,0]).range([0,300])
+  dibujarAxis(svg_paises_porcentaje_tests, false);
+
+  console.log(files[1])
 })
 
 function dibujarBarras(svg, data, clase,color, key) {
