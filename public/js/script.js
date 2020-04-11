@@ -50,7 +50,7 @@ Promise.all([
       data[i]['Country/Region'] == 'Argentina' || 
       data[i]['Country/Region'] == 'Chile' || 
       data[i]['Country/Region'] == 'Mexico' || 
-      // data[i]['Country/Region'] == 'Italy' ||
+      data[i]['Country/Region'] == 'Bolivia' ||
       data[i]['Country/Region'] == 'Brazil' ||
       data[i]['Country/Region'] == 'Ecuador'
     ) countryData.push(data[i])
@@ -209,23 +209,31 @@ Promise.all([
       files[1][i].por = por
       newData.push(files[1][i])
 
-      $item = $('<div class="item"></div>');
-      $icon = $('<div class="icon"></div>');
-      $name = $('<div class="txt"></div>');
-      $num = $('<span></span>');
-
-      $name.html(files[1][i].name);
-      $num.html(files[1][i].por.toFixed(2) + '%');
-      $name.append($num)
-      if(files[1][i].name != 'Colombia') $icon.css({'background-color': colorScale(files[1][i].name)})
-      $item.append($icon).append($name);
-
-      $('#leyenda_paises_circulos').append($item)
+      
     }
   }
 
   const maxTestNum = d3.max(newData.map(d => {return d.total_tests})) + 10000;
   const minTestNum = d3.min(newData.map(d => {return d.total_tests})) - 10000;
+
+  newData.sort((a,b) => {
+    return d3.descending(a.por, b.por);
+  })
+
+  for(var i = 0; i < newData.length; i++){
+    $item = $('<div class="item"></div>');
+    $icon = $('<div class="icon"></div>');
+    $name = $('<div class="txt"></div>');
+    $num = $('<span></span>');
+
+    $name.html(newData[i].name);
+    $num.html(newData[i].por.toFixed(2) + '%');
+    $name.append($num)
+    if(newData[i].name != 'Colombia') $icon.css({'background-color': colorScale(newData[i].name)})
+    $item.append($icon).append($name);
+
+    $('#leyenda_paises_circulos').append($item)
+  }
 
   xScale.domain([minTestNum, maxTestNum])
   heightScale.domain([100,0]).range([0,300])
