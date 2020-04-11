@@ -35,8 +35,8 @@ Promise.all([
 
   
 
-  const newData = [];
-  const countryData = [];
+  let newData = [];
+  let countryData = [];
 
   for(var i = 0; i < data.length; i++) {
     if(
@@ -187,10 +187,69 @@ Promise.all([
   
 
   // puntos
-  heightScale.domain([100,0]).range([0,300])
-  dibujarAxis(svg_paises_porcentaje_tests, false);
+  
 
-  console.log(files[1])
+  newData = []
+  for(var i = 0; i < files[1].length; i++) {
+    if(
+      files[1][i].name == 'Peru' || 
+      files[1][i].name == 'Argentina' || 
+      files[1][i].name == 'Chile' || 
+      files[1][i].name == 'Mexico' || 
+      files[1][i].name == 'Colombia' ||
+      files[1][i].name == 'Brazil' ||
+      files[1][i].name == 'France' ||
+      files[1][i].name == 'USA' ||
+      files[1][i].name == 'S. Korea' ||
+      files[1][i].name == 'Bolivia' ||
+      files[1][i].name == 'China' ||
+      files[1][i].name == 'Ecuador'
+    ) {
+      var por = (files[1][i].cases / files[1][i].total_tests) * 100
+      files[1][i].por = por
+      newData.push(files[1][i])
+
+      $item = $('<div class="item"></div>');
+      $icon = $('<div class="icon"></div>');
+      $name = $('<div class="txt"></div>');
+      $num = $('<span></span>');
+
+      $name.html(files[1][i].name);
+      $num.html(files[1][i].por.toFixed(2) + '%');
+      $name.append($num)
+      if(files[1][i].name != 'Colombia') $icon.css({'background-color': colorScale(files[1][i].name)})
+      $item.append($icon).append($name);
+
+      $('#leyenda_paises_circulos').append($item)
+    }
+  }
+
+  const maxTestNum = d3.max(newData.map(d => {return d.total_tests})) + 10000;
+  const minTestNum = d3.min(newData.map(d => {return d.total_tests})) - 10000;
+
+  xScale.domain([minTestNum, maxTestNum])
+  heightScale.domain([100,0]).range([0,300])
+  dibujarAxis(svg_paises_porcentaje_tests, false, 10, 100000);
+
+  xScale.domain([minTestNum, maxTestNum])
+  heightScale.domain([100,0]).range([0,300])
+
+  var nodos = svg_paises_porcentaje_tests.selectAll('.circulos_paises')
+  .data(newData)
+  .join('g')
+  .attr('class', 'circulos_paises')
+  .attr('transform', (d,i)=>{
+    return 'translate('+xScale(d.total_tests)+','+heightScale(d.por)+')'
+  })
+
+  nodos.append('circle')
+    .attr('r', 5)
+    .attr("fill", (d) => {
+      if(d.name == 'Colombia') return 'rgb(237, 194, 42)';
+      else return colorScale(d.name)
+    })
+    .attr('stroke', 'none')
+
 })
 
 function dibujarBarras(svg, data, clase,color, key) {
@@ -316,8 +375,8 @@ function dibujarPuntosPorcentaje(svg, clase, data, color, pos, key) {
     
 }
 
-function dibujarAxis(svg, log) {
-  for(var i = 1; i < heightScale.domain()[0]; i+=200){
+function dibujarAxis(svg, log, ystep=200, xstep=1) {
+  for(var i = 1; i < heightScale.domain()[0]; i+=ystep){
     svg.append("line")
       .attr('x1', d => {
         return 50;
@@ -334,7 +393,7 @@ function dibujarAxis(svg, log) {
       .attr('stroke', '#dcdcdc')
   }
 
-  for(var i = 1; i < dias_col; i++){
+  for(var i = 1; i < xScale.domain()[1]; i+=xstep){
     svg.append("line")
       .attr('x1', d => {
         return xScale(i);

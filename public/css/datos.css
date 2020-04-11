@@ -63,6 +63,7 @@ svg {
 .title .top .txt {
 	font-size: 1.5em;
 	margin-left: 30px;
+	width: calc(100% - 70px);
 }
 
 .leyenda {
@@ -89,6 +90,19 @@ svg {
 
 .leyenda .txt {
 	width: calc(100% - 20px);
+}
+
+.leyenda span {
+	margin-left: 5px;
+	font-size: 12px;
+	background-color: #dcdcdc;
+	padding: 3px;
+	border-radius: 3px;
+	color: #999;
+}
+.leyenda .name {
+	display: flex;
+	align-items: center;
 }
 .txt_bloque {
 	text-align: left;
