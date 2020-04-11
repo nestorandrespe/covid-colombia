@@ -16,8 +16,8 @@ var dias_col = 0;
 
 Promise.all([
   d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
-  d3.json('./archivo.json'),
-  d3.csv('./totales_tests.csv')
+  d3.json('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/archivo.json'),
+  d3.csv('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/totales_tests.csv')
 ]).then(files => {
   const data = files[0];
 
