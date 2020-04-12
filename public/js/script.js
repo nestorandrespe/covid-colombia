@@ -82,36 +82,12 @@ Promise.all([
 
     var data_regre = dataTemp.slice(dataTemp.length - 7, dataTemp.length)
 
-    var x_mean = 0;
-    var y_mean = 0;
-
-    for(var m = 0; m < data_regre.length; m++){
-      x_mean += m;
-      y_mean += data_regre[m].dif;
-    }
-
-    x_mean = x_mean / data_regre.length
-    y_mean = y_mean / data_regre.length
-
-    var sqrt_sub = 0;
-    var sum_sub = 0;
-
-    for(var m = 0; m < data_regre.length; m++){
-      var x_sub = m -  x_mean
-      var y_sub = data_regre[m].dif -  y_mean
-      sqrt_sub += x_sub * x_sub
-      sum_sub += x_sub * y_sub
-    }
-
-    var pendiente = sum_sub / sqrt_sub
-    var off = y_mean - (pendiente * x_mean)
+    var regre_items = regre_func(data_regre, 'dif')
 
     var x1 = dataTemp.length - 7;
     var x2 = dataTemp.length - 1;
-    var y1 = off;
-    var y2 = 6 * pendiente + off;
-
-    console.log(y1,y2)
+    var y1 = regre_items[1];
+    var y2 = 6 * regre_items[0] + regre_items[1];
 
     svg_nuevos.append('line')
     .attr('stroke', 'red')
@@ -156,10 +132,28 @@ Promise.all([
     }
     if(slice) files[2].slice(files[2].length - 1, files[2].length)
 
+    var data_regre = files[2].slice(files[2].length - 7, files[2].length)
+    var regre_items = regre_func(data_regre, 'por')
+
+    var x1 = files[2].length - 7;
+    var x2 = files[2].length - 1;
+    var y1 = regre_items[1];
+    var y2 = 6 * regre_items[0] + regre_items[1];
+
     dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
 
     heightScale.domain([20,0]).range([0,300])
+
+    svg_totales_tests.append('line')
+    .attr('stroke', 'red')
+    .attr('stroke-width', 2)
+    .attr('stroke-dasharray', 4)
+    .attr('x1', xScale(x1))
+    .attr('x2', xScale(x2))
+    .attr('y1', heightScale(y1))
+    .attr('y2', heightScale(y2))
+
     dibujarCurva(svg_totales_tests, files[2], '#666', 'por')
     dibujarPuntosPorcentaje(svg_totales_tests, 'por_totales_test', files[2], '#666', -20, 'por')
 
@@ -491,4 +485,32 @@ function organizaData(newData) {
   }
 
   return dataTemp;
+}
+
+function regre_func(data_regre, key){
+  var x_mean = 0;
+  var y_mean = 0;
+
+  for(var m = 0; m < data_regre.length; m++){
+    x_mean += m;
+    y_mean += data_regre[m][key];
+  }
+
+  x_mean = x_mean / data_regre.length
+  y_mean = y_mean / data_regre.length
+
+  var sqrt_sub = 0;
+  var sum_sub = 0;
+
+  for(var m = 0; m < data_regre.length; m++){
+    var x_sub = m -  x_mean
+    var y_sub = data_regre[m][key] -  y_mean
+    sqrt_sub += x_sub * x_sub
+    sum_sub += x_sub * y_sub
+  }
+
+  var pendiente = sum_sub / sqrt_sub
+  var off = y_mean - (pendiente * x_mean)
+
+  return [pendiente,  off]
 }
