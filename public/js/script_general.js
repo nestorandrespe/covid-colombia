@@ -96,9 +96,9 @@ Promise.all([
 
     // Curva nuevos casos por día
     escalaLineal();
-    heightScale.domain([10000,0]).range([0,300])
+    heightScale.domain([500,0]).range([0,300])
     dibujarAxis(svg_nuevos, false,500,1);
-    heightScale.domain([10000,0]).range([0,300])
+    heightScale.domain([500,0]).range([0,300])
        
 
     var data_regre = dataTemp.slice(dataTemp.length - 7, dataTemp.length)
@@ -127,9 +127,9 @@ Promise.all([
     ///
 
     escalaLineal();
-    heightScale.domain([50000,0]).range([0,300])
+    heightScale.domain([500,0]).range([0,300])
     dibujarAxis(svg_nuevos_usa, false,2500,1);
-    heightScale.domain([50000,0]).range([0,300])
+    heightScale.domain([500,0]).range([0,300])
        
 
     var data_regre = usa_data.slice(usa_data.length - 7, usa_data.length)

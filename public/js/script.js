@@ -89,6 +89,8 @@ Promise.all([
     var y1 = regre_items[1];
     var y2 = 6 * regre_items[0] + regre_items[1];
 
+    $('#lineal_1').html('Pendiente: ' + regre_items[0].toFixed(2))
+
     svg_nuevos.append('line')
     .attr('stroke', 'red')
     .attr('stroke-width', 2)
@@ -139,6 +141,8 @@ Promise.all([
     var x2 = files[2].length - 1;
     var y1 = regre_items[1];
     var y2 = 6 * regre_items[0] + regre_items[1];
+
+    $('#lineal_2').html('Pendiente: ' + regre_items[0].toFixed(2))
 
     dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
