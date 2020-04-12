@@ -7,7 +7,7 @@ var xScale = d3.scaleLinear()
 .range([50,1900]);
 
 var colorScale = d3.scaleOrdinal()
-  .range(d3.schemePaired);
+  .range(d3.schemeCategory10 );
 
 var heightMax = 2000;
 var heightMaxLog = 2000;
