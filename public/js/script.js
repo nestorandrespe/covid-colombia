@@ -51,7 +51,7 @@ Promise.all([
       data[i]['Country/Region'] == 'Chile' || 
       data[i]['Country/Region'] == 'Uruguay' || 
       data[i]['Country/Region'] == 'Mexico' || 
-      data[i]['Country/Region'] == 'Venezuela' || 
+      // data[i]['Country/Region'] == 'Venezuela' || 
       data[i]['Country/Region'] == 'Bolivia' ||
       data[i]['Country/Region'] == 'Brazil' ||
       data[i]['Country/Region'] == 'Ecuador'
@@ -134,7 +134,7 @@ Promise.all([
         files[2][m].por = 0
       }
     }
-    if(slice) files[2].slice(files[2].length - 1, files[2].length)
+    if(slice) files[2] = files[2].slice(0, files[2].length - 1)
 
     var data_regre = files[2].slice(files[2].length - 7, files[2].length)
     var regre_items = regre_func(data_regre, 'por')
@@ -146,7 +146,7 @@ Promise.all([
 
     $('#lineal_2').html('Pendiente: ' + regre_items[0].toFixed(2))
 
-    dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
+    dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif', true)
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
 
     heightScale.domain([20,0]).range([0,300])
@@ -204,7 +204,7 @@ Promise.all([
       files[1][i].name == 'Mexico' || 
       files[1][i].name == 'Colombia' ||
       files[1][i].name == 'France' ||
-      files[1][i].name == 'Venezuela' ||
+      // files[1][i].name == 'Venezuela' ||
       files[1][i].name == 'Uruguay' ||
       files[1][i].name == 'Brazil' ||
       files[1][i].name == 'USA' ||
@@ -266,7 +266,7 @@ Promise.all([
 
 })
 
-function dibujarBarras(svg, data, clase,color, key) {
+function dibujarBarras(svg, data, clase,color, key, texto = false) {
   var rect = svg.selectAll('.' + clase)
     .data(data)
     .join('g')
@@ -285,6 +285,20 @@ function dibujarBarras(svg, data, clase,color, key) {
     .attr('height', d=>{
       return 300 - heightScale(d[key])
     })
+
+    if(texto){
+      rect.append('text')
+      .text(d => {
+        if(d[key] > 0) return d[key]
+      })
+      .attr('y', d=>{
+        return heightScale(d[key])
+      })
+      .attr('font-size', 11)
+      .attr('fill', '#999')
+      .attr('text-anchor', 'middle')
+      .attr('transform', ' translate(0,-10)')
+    }
 }
 
 function dibujarCurva(svg, data, color, key) {
