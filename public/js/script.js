@@ -211,7 +211,6 @@ Promise.all([
     }
   }
 
-  console.log(newData)
   const maxTestNum = d3.max(newData.map(d => {return d.tests_mil})) + 10000;
   const minTestNum = d3.min(newData.map(d => {return d.tests_mil})) - 10000;
 
