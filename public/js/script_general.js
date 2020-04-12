@@ -18,16 +18,36 @@ Promise.all([
   d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
   d3.json('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/archivo.json'),
   d3.csv('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/totales_tests.csv'),
-  // d3.csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD&api_foundry=true')
+  d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv')
 ]).then(files => {
   const data = files[0];
+  const usa = files[3];
+
+  dias_usa = usa.columns
+  dias_usa = dias_usa.slice(11, dias_usa.length)
+
+  let usa_data = []
+  for(var d = 0; d < dias_usa.length; d++) {
+    usa_data.push({num: 0, name: 'usa', dif: 0, cambio: 0});
+  }
+  for(var i = 0; i < usa.length; i++) {
+    for(var d = 0; d < dias_usa.length; d++) {
+      usa_data[d].num = usa_data[d].num + parseInt(usa[i][dias_usa[d]])
+    }
+  }
+  for(var i = 1; i < usa_data.length; i++) {
+    usa_data[i].dif = usa_data[i].num - usa_data[i - 1].num;
+    usa_data[i].cambio = (usa_data[i].num - usa_data[i - 1].num) / usa_data[i - 1].num;
+  }
+
+  console.log(usa_data)
 
   dias = data.columns;
   dias = dias.slice(4, dias.length);
 
   var svg = d3.select('#bg');
   var svg_nuevos = d3.select('#bg_2');
-  var svg_paises_acumulado = d3.select('#bg_3');
+  var svg_nuevos_usa = d3.select('#bg_4');
   var svg_totales_tests = d3.select('#bg_4');
   var svg_paises_porcentaje_tests = d3.select('#bg_5');
 
@@ -61,23 +81,24 @@ Promise.all([
 
     dias_col = dataTemp.length;
 
-    xScale.domain([0,dias_col])
-    heightMax = parseInt(dataTemp[dias_col - 1].num) + 600;
+    xScale.domain([0,usa_data.length])
+    heightMax = 3000;
+    // heightMax = parseInt(usa_data[usa_data.length - 1].num) + 15000;
     heightMaxLog = parseInt(dataTemp[dias_col - 1].num) + 3000;
 
     heightScale.domain([heightMax,0]).range([0,800])
-    dibujarAxis(svg, true);
+    dibujarAxis(svg, true,10000,1);
 
-    // Curva log
-    escalaLogaritmica();
-    dibujarCurva(svg, dataTemp, '#dcdcdc', 'num');
-    dibujarPuntos(svg, 'circles_3', dataTemp, '#999', -20, 'num', false);
+    // // Curva log
+    // escalaLogaritmica();
+    // dibujarCurva(svg, dataTemp, '#dcdcdc', 'num');
+    // dibujarPuntos(svg, 'circles_3', dataTemp, '#999', -20, 'num', false);
 
     // Curva nuevos casos por día
     escalaLineal();
-    heightScale.domain([350,0]).range([0,300])
-    dibujarAxis(svg_nuevos, false);
-    heightScale.domain([350,0]).range([0,300])
+    heightScale.domain([10000,0]).range([0,300])
+    dibujarAxis(svg_nuevos, false,500,1);
+    heightScale.domain([10000,0]).range([0,300])
        
 
     var data_regre = dataTemp.slice(dataTemp.length - 7, dataTemp.length)
@@ -103,49 +124,24 @@ Promise.all([
     dibujarPuntos(svg_nuevos, 'circles_2', dataTemp, '#999', 30, 'dif', true);
 
 
-    heightScale.domain([3500,0]).range([0,300])
-    dibujarAxis(svg_totales_tests, false);
-    heightScale.domain([3500,0]).range([0,300])
+    ///
 
-    var slice = false
+    escalaLineal();
+    heightScale.domain([50000,0]).range([0,300])
+    dibujarAxis(svg_nuevos_usa, false,2500,1);
+    heightScale.domain([50000,0]).range([0,300])
+       
 
-    for(var m = 0; m < files[2].length; m++){
-      var total = parseInt(files[2][m].total);
-      files[2][m].name = 'Colombia'
-      if(m > 0){
-        var anterior = parseInt(files[2][m - 1].total);
-        if(anterior > 0 && m < dataTemp.length){
-          files[2][m].dif = total - anterior
-          files[2][m].por = (dataTemp[m].dif / (total - anterior)) * 100
-        }
-        else if(m == dataTemp.length){
-          slice = true;
-        }
-        else {
-          files[2][m].dif = 0
-          files[2][m].por = 0
-        }
-      } else {
-        files[2][m].dif = 0
-        files[2][m].por = 0
-      }
-    }
-    if(slice) files[2].slice(files[2].length - 1, files[2].length)
+    var data_regre = usa_data.slice(usa_data.length - 7, usa_data.length)
 
-    var data_regre = files[2].slice(files[2].length - 7, files[2].length)
-    var regre_items = regre_func(data_regre, 'por')
+    var regre_items = regre_func(data_regre, 'dif')
 
-    var x1 = files[2].length - 7;
-    var x2 = files[2].length - 1;
+    var x1 = usa_data.length - 7;
+    var x2 = usa_data.length - 1;
     var y1 = regre_items[1];
     var y2 = 6 * regre_items[0] + regre_items[1];
 
-    dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
-    dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
-
-    heightScale.domain([20,0]).range([0,300])
-
-    svg_totales_tests.append('line')
+    svg_nuevos_usa.append('line')
     .attr('stroke', 'red')
     .attr('stroke-width', 2)
     .attr('stroke-dasharray', 4)
@@ -154,108 +150,20 @@ Promise.all([
     .attr('y1', heightScale(y1))
     .attr('y2', heightScale(y2))
 
-    dibujarCurva(svg_totales_tests, files[2], '#666', 'por')
-    dibujarPuntosPorcentaje(svg_totales_tests, 'por_totales_test', files[2], '#666', -20, 'por')
+    dibujarBarras(svg_nuevos_usa, usa_data, 'rect_1_usa','rgba(237, 194, 42, 0.3)','dif')
+    dibujarCurva(svg_nuevos_usa, usa_data, '#666', 'dif');
+    dibujarPuntos(svg_nuevos_usa, 'circles_2_usa', usa_data, '#999', 30, 'dif', true);
+
 
     // Curva acumulado
     heightScale.domain([heightMax,0]).range([0,800])
     dibujarCurva(svg, dataTemp, 'rgb(237, 194, 42)', 'num');
     dibujarPuntos(svg, 'circles', dataTemp, 'rgb(237, 194, 42)', -20, 'num', false);
-  }
 
-  heightScale.range([0,500])
-  dibujarAxis(svg_paises_acumulado, false);
+    dibujarCurva(svg, usa_data, 'rgb(237, 194, 42)', 'num');
+    dibujarPuntos(svg, 'circles_usa', usa_data, 'rgb(237, 194, 42)', -20, 'num', false);
+  }
   
-  for(var i = 0; i < countryData.length; i++) {
-    var dataTemp = organizaData(countryData[i]);
-
-    heightScale.domain([heightMax,0]).range([0,500])
-    dibujarCurva(svg_paises_acumulado, dataTemp, 'rgb(237, 194, 42)', 'num');
-    dibujarDot(svg_paises_acumulado,'dots_'+i, dataTemp, 'num');
-
-    $item = $('<div class="item"></div>');
-    $icon = $('<div class="icon"></div>');
-    $name = $('<div class="txt"></div>');
-
-    $name.html(dataTemp[0].name);
-    if(dataTemp[0].name != 'Colombia') $icon.css({'background-color': colorScale(dataTemp[0].name)})
-    $item.append($icon).append($name);
-
-    $('#leyenda_paises').append($item)
-  }
-
-  
-
-  // puntos
-  
-
-  newData = []
-  for(var i = 0; i < files[1].length; i++) {
-    if(
-      files[1][i].name == 'Peru' || 
-      files[1][i].name == 'Argentina' || 
-      files[1][i].name == 'Chile' || 
-      files[1][i].name == 'Mexico' || 
-      files[1][i].name == 'Colombia' ||
-      files[1][i].name == 'Brazil' ||
-      files[1][i].name == 'France' ||
-      files[1][i].name == 'USA' ||
-      files[1][i].name == 'S. Korea' ||
-      files[1][i].name == 'Bolivia' ||
-      files[1][i].name == 'China' ||
-      files[1][i].name == 'Ecuador'
-    ) {
-      var por = (files[1][i].cases / files[1][i].total_tests) * 100
-      files[1][i].por = por
-      newData.push(files[1][i])
-    }
-  }
-
-  const maxTestNum = d3.max(newData.map(d => {return d.tests_mil})) + 1000;
-  const minTestNum = d3.min(newData.map(d => {return d.tests_mil})) - 1000;
-
-  newData.sort((a,b) => {
-    return d3.descending(a.por, b.por);
-  })
-
-  for(var i = 0; i < newData.length; i++){
-    $item = $('<div class="item"></div>');
-    $icon = $('<div class="icon"></div>');
-    $name = $('<div class="txt"></div>');
-    $num = $('<span></span>');
-
-    $name.html(newData[i].name);
-    $num.html(newData[i].por.toFixed(2) + '%');
-    $name.append($num)
-    if(newData[i].name != 'Colombia') $icon.css({'background-color': colorScale(newData[i].name)})
-    $item.append($icon).append($name);
-
-    $('#leyenda_paises_circulos').append($item)
-  }
-
-  xScale.domain([minTestNum, maxTestNum])
-  heightScale.domain([100,0]).range([0,300])
-  dibujarAxis(svg_paises_porcentaje_tests, false, 10, 100000);
-
-  xScale.domain([minTestNum, maxTestNum])
-  heightScale.domain([100,0]).range([0,300])
-
-  var nodos = svg_paises_porcentaje_tests.selectAll('.circulos_paises')
-  .data(newData)
-  .join('g')
-  .attr('class', 'circulos_paises')
-  .attr('transform', (d,i)=>{
-    return 'translate('+xScale(d.tests_mil)+','+heightScale(d.por)+')'
-  })
-
-  nodos.append('circle')
-    .attr('r', 8)
-    .attr("fill", (d) => {
-      if(d.name == 'Colombia') return 'rgb(237, 194, 42)';
-      else return colorScale(d.name)
-    })
-    .attr('stroke', 'none')
-
 })
 
 function dibujarBarras(svg, data, clase,color, key) {
@@ -335,6 +243,7 @@ function dibujarPuntos(svg, clase, data, color, pos, key, por) {
       return d[key]
     })
     .attr('fill', color)
+    .attr('font-size', 7)
     .attr('fill', '#999')
     .attr('text-anchor', 'middle')
     .attr('transform', 'translate(0,'+pos+')')
@@ -347,7 +256,7 @@ function dibujarPuntos(svg, clase, data, color, pos, key, por) {
       .attr('fill', 'rgb(237, 194, 42)')
       .attr('fill', '#999')
       .attr('text-anchor', 'middle')
-      .attr('font-size', 12)
+      .attr('font-size', 9)
       .attr('transform', 'translate(0,-20)')
     }
 }

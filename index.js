@@ -9,6 +9,10 @@ server.get("/", (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
+server.get("/usa", (req, res) => {
+    res.sendFile(__dirname + '/usa.html');
+});
+
 server.listen(port, () => {
     console.log(`Server listening at ${port}`);
 });
