@@ -7,7 +7,7 @@ var xScale = d3.scaleLinear()
 .range([50,1900]);
 
 var colorScale = d3.scaleOrdinal()
-  .range(d3.schemeCategory10);
+  .range(d3.schemePaired);
 
 var heightMax = 2000;
 var heightMaxLog = 2000;
@@ -49,7 +49,9 @@ Promise.all([
       data[i]['Country/Region'] == 'Peru' || 
       data[i]['Country/Region'] == 'Argentina' || 
       data[i]['Country/Region'] == 'Chile' || 
+      data[i]['Country/Region'] == 'Uruguay' || 
       data[i]['Country/Region'] == 'Mexico' || 
+      data[i]['Country/Region'] == 'Venezuela' || 
       data[i]['Country/Region'] == 'Bolivia' ||
       data[i]['Country/Region'] == 'Brazil' ||
       data[i]['Country/Region'] == 'Ecuador'
@@ -201,8 +203,10 @@ Promise.all([
       files[1][i].name == 'Chile' || 
       files[1][i].name == 'Mexico' || 
       files[1][i].name == 'Colombia' ||
-      files[1][i].name == 'Brazil' ||
       files[1][i].name == 'France' ||
+      files[1][i].name == 'Venezuela' ||
+      files[1][i].name == 'Uruguay' ||
+      files[1][i].name == 'Brazil' ||
       files[1][i].name == 'USA' ||
       files[1][i].name == 'S. Korea' ||
       files[1][i].name == 'Bolivia' ||
