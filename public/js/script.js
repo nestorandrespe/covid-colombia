@@ -18,7 +18,7 @@ Promise.all([
   d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'),
   d3.json('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/archivo.json'),
   d3.csv('https://raw.githubusercontent.com/nestorandrespe/covid-colombia/master/public/totales_tests.csv'),
-  d3.csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD&api_foundry=true')
+  // d3.csv('https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD&api_foundry=true')
 ]).then(files => {
   const data = files[0];
 
@@ -105,11 +105,10 @@ Promise.all([
 
     var pendiente = sum_sub / sqrt_sub
     var off = y_mean - (pendiente * x_mean)
-    console.log(pendiente,off)
 
     var x1 = dataTemp.length - 7;
     var x2 = dataTemp.length - 1;
-    var y1 = 106;
+    var y1 = off;
     var y2 = 6 * pendiente + off;
 
     console.log(y1,y2)
@@ -156,7 +155,7 @@ Promise.all([
       }
     }
     if(slice) files[2].slice(files[2].length - 1, files[2].length)
-    
+
     dibujarBarras(svg_totales_tests, files[2], 'rect_1','rgba(237, 194, 42, 0.2)','dif')
     dibujarBarras(svg_totales_tests, dataTemp, 'rect_1','rgba(237, 194, 42, 0.4)','dif')
 
