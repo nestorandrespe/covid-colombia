@@ -49,7 +49,7 @@ Promise.all([
       data[i]['Country/Region'] == 'Peru' || 
       data[i]['Country/Region'] == 'Argentina' || 
       data[i]['Country/Region'] == 'Chile' || 
-      data[i]['Country/Region'] == 'Uruguay' || 
+      // data[i]['Country/Region'] == 'Uruguay' || 
       data[i]['Country/Region'] == 'Mexico' || 
       // data[i]['Country/Region'] == 'Venezuela' || 
       data[i]['Country/Region'] == 'Bolivia' ||
@@ -205,7 +205,7 @@ Promise.all([
       files[1][i].name == 'Colombia' ||
       files[1][i].name == 'France' ||
       // files[1][i].name == 'Venezuela' ||
-      files[1][i].name == 'Uruguay' ||
+      // files[1][i].name == 'Uruguay' ||
       files[1][i].name == 'Brazil' ||
       files[1][i].name == 'USA' ||
       files[1][i].name == 'S. Korea' ||
