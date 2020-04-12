@@ -208,13 +208,12 @@ Promise.all([
       var por = (files[1][i].cases / files[1][i].total_tests) * 100
       files[1][i].por = por
       newData.push(files[1][i])
-
-      
     }
   }
 
-  const maxTestNum = d3.max(newData.map(d => {return d.total_tests})) + 10000;
-  const minTestNum = d3.min(newData.map(d => {return d.total_tests})) - 10000;
+  console.log(newData)
+  const maxTestNum = d3.max(newData.map(d => {return d.tests_mil})) + 10000;
+  const minTestNum = d3.min(newData.map(d => {return d.tests_mil})) - 10000;
 
   newData.sort((a,b) => {
     return d3.descending(a.por, b.por);
@@ -247,7 +246,7 @@ Promise.all([
   .join('g')
   .attr('class', 'circulos_paises')
   .attr('transform', (d,i)=>{
-    return 'translate('+xScale(d.total_tests)+','+heightScale(d.por)+')'
+    return 'translate('+xScale(d.tests_mil)+','+heightScale(d.por)+')'
   })
 
   nodos.append('circle')
