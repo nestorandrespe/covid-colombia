@@ -6,7 +6,7 @@ var fs = require('fs');
 server.use(express.static('public'));
 
 server.get("/", (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index copy.html');
 });
 
 server.get("/usa", (req, res) => {
