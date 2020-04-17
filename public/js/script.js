@@ -107,9 +107,9 @@ Promise.all([
     dibujarPuntos(svg_nuevos, 'circles_2', dataTemp, '#999', 30, 'dif', true);
 
 
-    heightScale.domain([3500,0]).range([0,300])
+    heightScale.domain([4000,0]).range([0,300])
     dibujarAxis(svg_totales_tests, false);
-    heightScale.domain([3500,0]).range([0,300])
+    heightScale.domain([4000,0]).range([0,300])
 
     var slice = false
 
